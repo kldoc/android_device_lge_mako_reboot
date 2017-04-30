@@ -43,7 +43,7 @@ public class DisplayGammaCalibration {
         }
     };
 
-    private static String[] sLastSetValues = new String[3];
+    private static String[] sLastSetValues = new String[2];
 
     public static boolean isSupported() {
         /* Barf out if the interface is absent */
@@ -52,16 +52,19 @@ public class DisplayGammaCalibration {
     }
 
     public static int getNumberOfControls() {
-        return 3;
+        return 2;
     }
 
-    public static int getMaxValue(int controlIdx) {
-        return controlIdx == 2 ? 80 : 31;
+    public static int getMaxValue()  {
+        return 31;
     }
 
-    public static int getMinValue(int controlIdx) {
+    public static int getMinValue()  {
         return 0;
     }
+
+    /* The reference implementation only touched 2 values, 5 and 6,
+     * so lets stick with those for now */
 
     public static String getCurGamma(int control) {
         if (H.hasMessages(control)) {
