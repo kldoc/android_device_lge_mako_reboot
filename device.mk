@@ -24,24 +24,26 @@ DEVICE_PACKAGE_OVERLAYS := device/lge/mako/overlay
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 PRODUCT_PACKAGES := \
-    lights.mako \
     libwpa_client \
     hostapd \
+    dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf
 
 PRODUCT_PACKAGES += \
+	lights.mako
+
+PRODUCT_PACKAGES += \
     charger_res_images
 
-# http://b/15193147
-# TODO(danalbert): Remove this once stlport is dead and gone.
-PRODUCT_PACKAGES +=  libstlport
+PRODUCT_PACKAGES += \
+    libstlport
 
 PRODUCT_COPY_FILES += \
 	device/lge/mako/WCNSS_cfg.dat:system/vendor/firmware/wlan/prima/WCNSS_cfg.dat \
 	device/lge/mako/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
 	device/lge/mako/WCNSS_qcom_wlan_nv.bin:system/etc/wifi/WCNSS_qcom_wlan_nv.bin \
-	device/lge/mako/init.mako.wifi.sh:system/bin/init.mako.wifi.sh
+	device/lge/mako/init.mako.wifi.sh:system/etc/init.mako.wifi.sh
 
 PRODUCT_COPY_FILES += \
 	device/lge/mako/audio_policy.conf:system/etc/audio_policy.conf
@@ -56,6 +58,7 @@ PRODUCT_COPY_FILES += \
 	device/lge/mako/init.mako.rc:root/init.mako.rc \
 	device/lge/mako/init.mako.usb.rc:root/init.mako.usb.rc \
 	device/lge/mako/fstab.mako:root/fstab.mako \
+	device/lge/mako/twrp.fstab:recovery/root/etc/twrp.fstab \
 	device/lge/mako/ueventd.mako.rc:root/ueventd.mako.rc \
 	device/lge/mako/media_profiles.xml:system/etc/media_profiles.xml \
 	frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
@@ -118,6 +121,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.sf.lcd_density=320
 
+PRODUCT_PROPERTY_OVERRIDES += \
+	telephony.lteOnGsmDevice=1 \
+	ro.telephony.default_network=9 \
+	ro.ril.def.preferred.network=9
+
 # Audio Configuration
 # FIXME: Remove persist.audio.handset.mic and persist.audio.fluence.mode
 #        while switching new audio HAL from legacy HAL
@@ -140,6 +148,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 #Upto 3 layers can go through overlays
 PRODUCT_PROPERTY_OVERRIDES += persist.hwc.mdpcomp.enable=true
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.dex2oat-filter=speed \
+    dalvik.vm.dex2oat-swap=false
 
 PRODUCT_CHARACTERISTICS := nosdcard
 
@@ -170,11 +182,10 @@ PRODUCT_PACKAGES += \
 	power.msm8960
 
 PRODUCT_COPY_FILES += \
-	device/lge/mako/init.mako.bt.sh:system/bin/init.mako.bt.sh
+	device/lge/mako/init.mako.bt.sh:system/etc/init.mako.bt.sh
 
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.qualcomm.bt.hci_transport=smd \
-	qcom.bluetooth.soc=smd
+	ro.qualcomm.bt.hci_transport=smd
 
 ifeq ($(findstring tiny, $(TARGET_PRODUCT)),)
 PRODUCT_PACKAGES += \
@@ -182,6 +193,10 @@ PRODUCT_PACKAGES += \
 	camera.msm8960 \
 	libmmcamera_interface2 \
 	libmmcamera_interface
+
+# SnapdragonCamera
+#PRODUCT_PACKAGES += \
+#        SnapdragonCamera
 
 PRODUCT_PACKAGES += \
         libmm-omxcore \
@@ -219,16 +234,11 @@ PRODUCT_PACKAGES += \
 	keystore.msm8960
 
 PRODUCT_PACKAGES += \
-	hostapd_default.conf \
 	wpa_supplicant_overlay.conf \
 	p2p_supplicant_overlay.conf
 
 PRODUCT_PACKAGES += \
 	power.mako
-
-# Gello
- PRODUCT_PACKAGES += \
-	Gello
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 	rild.libpath=/system/lib/libril-qc-qmi-1.so
@@ -242,7 +252,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    wifi.interface=wlan0
+	wifi.interface=wlan0
 
 # Enable AAC 5.1 output
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -255,21 +265,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.qc.sensors.wl_dis=true \
 	ro.qualcomm.sensors.smd=true
 
-# IO Scheduler
+# set SELinux property value
 PRODUCT_PROPERTY_OVERRIDES += \
-	sys.io.scheduler=bfq
+    ro.build.selinux=1
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.dex2oat-filter=speed \
-    dalvik.vm.dex2oat-swap=false
-
-# Camera
-#PRODUCT_PACKAGES += \
-#    Snap
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.stagefright.legacyencoder=true \
-    media.stagefright.less-secure=true \
-    persist.camera.cpp.duplication=false
+media.stagefright.legacyencoder=true \
+media.stagefright.less-secure=true \
+persist.camera.cpp.duplication=false
 
 $(call inherit-product, frameworks/native/build/phone-xhdpi-2048-dalvik-heap.mk)
+$(call inherit-product, hardware/qcom/msm8960/msm8960.mk)

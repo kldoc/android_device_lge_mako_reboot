@@ -3,7 +3,7 @@
    "remote":      "los",
    "repository": "lge-kernel-mako",
    "target_path": "kernel/lge/mako",
-   "revision":    "android-7.1"
+   "revision":    "cm-14.1"
  },
  {
     "remote":      "omnirom",

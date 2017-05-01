@@ -51,7 +51,9 @@ TARGET_BOARD_INFO_FILE := device/lge/mako/board-info.txt
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/lge/mako/bluetooth
 
 # Use the CM PowerHAL
-TARGET_USES_CM_POWERHAL := true
+#TARGET_USES_CM_POWERHAL := true
+
+TW_THEME := portrait_hdpi
 
 # FIXME: HOSTAPD-derived wifi driver
 BOARD_HAS_QCOM_WLAN := true
@@ -107,13 +109,14 @@ TARGET_NO_RPC := true
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := true
 
 TARGET_RELEASETOOLS_EXTENSIONS := device/lge/mako
+KERNEL_TOOLCHAIN_PREFIX := arm-linux-androideabi-
 
 BOARD_SEPOLICY_DIRS += \
        device/lge/mako/sepolicy
 
 BOARD_CHARGER_ENABLE_SUSPEND := true
 
-TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
+TARGET_NEEDS_PLATFORM_TEXTRELS := true
 TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 TARGET_NEEDS_GCC_LIBC := true
 USE_DEVICE_SPECIFIC_CAMERA:= true
